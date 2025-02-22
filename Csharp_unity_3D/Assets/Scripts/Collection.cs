@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace Collection
 {
+    //-----------------------#1-------------------------------
     public class Calculate
     {
         /// <summary>
@@ -27,6 +28,8 @@ namespace Collection
         }
     }
 
+    //-----------------------#2-------------------------------
+
     /// <summary>
     /// 素な数に関するクラス
     /// </summary>
@@ -47,10 +50,10 @@ namespace Collection
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public int[] PrimeNumberList(int n)
+        public static int[] PrimeNumberList(int n)
         {
             List<int> prime_list = new List<int> {2, 3};
-            int[] n_list = Enumerable.Range(0, n / 2 - 1).Select(x => 5 + x * 2).Where(x => x % 3 != 0).ToArray();
+            int[] n_list = Enumerable.Range(0, (n - 5) / 2 + 1).Select(x => 5 + x * 2).Where(x => x % 3 != 0).ToArray();
 
             for (int i = 0; i < n; i++)
             {
@@ -78,7 +81,7 @@ namespace Collection
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public int ThePrimeNumber(int n)
+        public static int ThePrimeNumber(int n)
         {
             List<int> primelist = new List<int> {2, 3};
             int i = 1;
@@ -114,7 +117,7 @@ namespace Collection
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public int[] CoPrimeNumberList(int n)
+        public static int[] CoPrimeNumberList(int n)
         {
             List<int> coprimelist = new List<int> {1};
             Calculate cal = new Calculate();
@@ -133,7 +136,7 @@ namespace Collection
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public int[] PrimeFactorization(int n)
+        public static int[] PrimeFactorization(int n)
         {
             List<int> primefac = new List<int> {};
             int m = n;
@@ -157,7 +160,7 @@ namespace Collection
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
-        public bool IsPrime(int n)
+        public static bool IsPrime(int n)
         {
             int i = 1;
             for (int j = 2; j < 4; j++)
@@ -186,6 +189,8 @@ namespace Collection
         }
     }
 
+    //-----------------------#3-------------------------------
+
     /// <summary>
     ///　線形合同法 (Linear congruential generators) による乱数を生成します
     /// </summary>
@@ -197,7 +202,6 @@ namespace Collection
         private int m;
         private int x = 0;
         private int start;
-        private Prime prime;
 
         /// <summary>
         /// start 以上 end 未満の乱数を生成します
@@ -218,7 +222,6 @@ namespace Collection
                 this.start = start;
                 this.seed = DateTime.Now.Millisecond % end;
                 this.m = end;
-                this.prime = new Prime(end);
                 int[] a_c = find_a_c(end);
                 this.a = a_c[0];
                 this.c = a_c[1];
@@ -237,7 +240,7 @@ namespace Collection
 
             //　a の値を求める
             int j = 0;
-            foreach (int i in prime.PrimeFactorization(m))
+            foreach (int i in Prime.PrimeFactorization(m))
             {
                 if (i != j)
                 {
@@ -248,7 +251,7 @@ namespace Collection
             a_c[0] += 1;
 
             //　c の値を求める
-            int[] coli = prime.CoPrimeNumberList(m);
+            int[] coli = Prime.CoPrimeNumberList(m);
             a_c[1] = coli[coli.Length / 2];
             return a_c;
         }
@@ -282,7 +285,6 @@ namespace Collection
         private int x = 0;
         private int start;
         private int end; //　追加
-        private Prime prime;
 
         /// <summary>
         /// start 以上 end 未満の乱数を生成します
@@ -307,7 +309,6 @@ namespace Collection
                 {
                     this.m = end;
                 }
-                this.prime = new Prime(end);
                 int[] a_c = find_a_c(end);
                 this.a = a_c[0];
                 this.c = a_c[1];
@@ -326,7 +327,7 @@ namespace Collection
 
             //　a の値を求める
             int j = 0;
-            foreach (int i in prime.PrimeFactorization(m))
+            foreach (int i in Prime.PrimeFactorization(m))
             {
                 if (i != j)
                 {
@@ -337,7 +338,7 @@ namespace Collection
             a_c[0] += 1;
 
             //　c の値を求める
-            int[] coli = prime.CoPrimeNumberList(m);
+            int[] coli = Prime.CoPrimeNumberList(m);
             a_c[1] = coli[coli.Length / 2];
             return a_c;
         }
@@ -351,10 +352,11 @@ namespace Collection
             //　乱数を生成、生成した値が start 未満または seed が 1以上なら再生成
             this.x = (this.a * this.x + this.c) % this.m;
             int generated = this.x * (this.end - this.start) / this.m + this.start; //　追加
-            while (this.seed > 0) //　一部変更
+            while (this.seed > 0 || generated < this.start) //　一部変更
             {
                 this.x = (this.a * this.x + this.c) % this.m;
                 this.seed -= 1;
+                generated = this.x * (this.end - this.start) / this.m + this.start; //　追加
             }
             return generated; //　変更
         }

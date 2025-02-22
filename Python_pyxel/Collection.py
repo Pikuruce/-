@@ -1,5 +1,5 @@
 import time
-
+#-------------------------#1--------------------------------
 def gcd(n1, n2):
     '''
     最大公約数を見つけます
@@ -13,7 +13,7 @@ def gcd(n1, n2):
         return n2
     else:
         return gcd(n2, n1 % n2)
-
+#-------------------------#2--------------------------------
 class prime():
     '''
     primelist にn以下の素数を格納します
@@ -110,7 +110,7 @@ class prime():
                     return True
                 elif n % nearprime == 0:
                     return False
-
+#-------------------------#3--------------------------------
 class LCG():
     '''
     線形合同法 (Linear congruential generators) による乱数を生成します
@@ -221,7 +221,8 @@ class ReLCG():
         #　seed値が 0 以上か、生成した数字が start 未満のとき繰り返し計算する
         self.__x = (self.__a * self.__x + self.__c) % self.__m
         generated = self.__x * (self.__end - self.__start) // self.__m + self.__start #　追加
-        while self.__seed > 0: #　一部変更
+        while self.__seed > 0 or generated < self.__start: #　一部変更
             self.__x = (self.__a * self.__x + self.__c) % self.__m
             self.__seed -= 1
+            generated = self.__x * (self.__end - self.__start) // self.__m + self.__start #　追加
         return generated #　変更
