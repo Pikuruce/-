@@ -1,3 +1,5 @@
+//-----------------------#1-------------------------------
+
 /**
  * 二つの数の最大公約数を返します
  * @param {number} n1 整数
@@ -15,6 +17,8 @@ export function gcd(n1, n2)
         return gcd(n2, n1 % n2);
     }
 }
+
+//-----------------------#2-------------------------------
 
 /**
  * 素な数に関するクラス
@@ -37,7 +41,7 @@ export class prime
     static primenumberlist(n)
     {
         let prime_list = [2, 3];
-        let n_list = Array.from({length: Math.floor(n / 2) - 1}, (_, x) => 5 + x * 2).filter(num => num % 3 != 0);
+        let n_list = Array.from({length: Math.floor((n - 5) / 2) + 1}, (_, x) => 5 + x * 2).filter(num => num % 3 != 0);
         
         for (let i = 0; i < n; i++)
         {
@@ -170,6 +174,8 @@ export class prime
         }
     }
 }
+
+//-----------------------#3-------------------------------
 
 /**
  * 線形合同法 (Linear congruential generators) による乱数を生成します
@@ -322,10 +328,11 @@ export class ReLCG
         //　乱数を生成、生成した値が start 未満または seed が 1以上なら再生成
         this.#x = (this.#a * this.#x + this.#c) % this.#m;
         let generated = this.#x * (this.#end - this.#start) / this.#m + this.#start; //　追加
-        while (this.#seed > 0) //　一部変更
+        while (this.#seed > 0 || generated < this.#start) //　一部変更
         {
             this.#x = (this.#a * this.#x + this.#c) % this.#m;
             this.#seed -= 1;
+            generated = this.#x * (this.#end - this.#start) / this.#m + this.#start; //　追加
         }
         return Math.floor(generated); //　変更
     }
